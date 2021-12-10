@@ -5,14 +5,15 @@ const todoList = document.querySelector(".todo-list");
 const select=document.querySelector(".select");
 
 
-//const todo_input=document.querySelector('.todo-input');
+let check;
+let data;
+let d1;
+let d2;
+var d3;
 
-//console.log(todo_input);
-//Event Listeners
 todo_button.addEventListener('click',buttonClicked);
-todoList.addEventListener('click',deleteTodo);
+todoList.addEventListener('click',manageTodo);
 select.addEventListener('click',selectMe);
-todoList.addEventListener('click',removeFromLocalStorage);
 retrivingFromLocal();
 
 
@@ -26,24 +27,28 @@ function retrivingFromLocal()
     let array=[];
     console.log(JSON.parse(localStorage.getItem("todos")));
     array=JSON.parse(localStorage.getItem("todos"));
-    //let array=localStorage.getItem("todos");
-//console.log(array.length);
-//console.log(typeof(array));
     array.forEach(function(values){
     const todoDiv=document.createElement("div");
     todoDiv.classList.add('todo');
     const newTodo=document.createElement("li")
     newTodo.innerText=values;
     todoDiv.appendChild(newTodo);
+    const trashEditButton=document.createElement("button");
+    trashEditButton.innerHTML=`<i class="fas fa-edit edit-btn btn"></i>`;
+    
+    todoDiv.appendChild(trashEditButton);
     const completedButton =document.createElement("button");
-    completedButton.innerHTML=`<i class="fas fa-check"></i>`;
+    completedButton.innerHTML=`<i class="fas fa-check btn"></i>`;
     todoDiv.appendChild(completedButton);
     const trashButton=document.createElement("button");
-    trashButton.innerHTML=`<i class="fas fa-trash delete-btn"></i>`;
+    trashButton.innerHTML=`<i class="fas fa-trash delete-btn btn"></i>`;
+    
     todoDiv.appendChild(trashButton);
+    
 
     todoList.appendChild(todoDiv);
 });
+
 
 
 }
@@ -56,19 +61,19 @@ function buttonClicked(event)
 //console.log(typeof(todo_input.value));
 if(todo_input.value!=="")
 {
-
-
-
   const todoDiv=document.createElement("div");
   todoDiv.classList.add('todo');
   const newTodo=document.createElement("li")
   newTodo.innerText=todo_input.value;
   todoDiv.appendChild(newTodo);
+  const trashEditButton=document.createElement("button");
+    trashEditButton.innerHTML=`<i class="fas fa-edit edit-btn btn"></i>`;
+    todoDiv.appendChild(trashEditButton);
   const completedButton =document.createElement("button");
-  completedButton.innerHTML=`<i class="fas fa-check"></i>`;
+  completedButton.innerHTML=`<i class="fas fa-check btn"></i>`;
   todoDiv.appendChild(completedButton);
   const trashButton=document.createElement("button");
-  trashButton.innerHTML=`<i class="fas fa-trash delete-btn"></i>`;
+  trashButton.innerHTML=`<i class="fas fa-trash delete-btn btn"></i>`;
   todoDiv.appendChild(trashButton);
 
   todoList.appendChild(todoDiv);
@@ -77,42 +82,67 @@ if(todo_input.value!=="")
   //console.log('hello');
   todo_input.value="";
 }
- function deleteTodo(e)
+
+ function manageTodo(e)
  {
-   //console.log(e.target.parentElement);
 
-   //console.log(e.target.classList[1]);
-
-
+    
+  
    if(e.target.children[0].classList.contains("fa-trash")){
-   //console.log(e.target.parentElement);
-  const item=e.target.parentElement;
-  item.classList.add("fall");
-  //console.log("check");
-  item.addEventListener('transitionend',e=>{
-    item.remove();
-  });
+     data=e.target.previousElementSibling.previousElementSibling.previousElementSibling.innerText;
+    removeFromLocalStorage(data);
+   const item=e.target.parentElement;
+   item.classList.add("fall");
+    
+  //console.log(item);
+   setTimeout(function(){
+     //console.log("ch");
+      item.remove();;
 
+   },700);
 
 }
 if(e.target.children[0].classList.contains("fa-check"))
 {
-  //e.target.parentElement.firstElementSibling
-//  console.log(e.target.parentElement.previousElementSibling);
   const item2=e.target.parentElement;
-  //console.log(e.target.parentElement);
-
   item2.classList.toggle('completed');
+  
+}
+if(e.target.children[0].classList.contains("fa-edit"))
+{
+  //console.log(e.target.previousElementSibling.innerHTML);
+  let t=e.target.previousElementSibling;
+   d1=t.innerText;
+  //console.log(d1);
+  t.setAttribute('contenteditable','true');
+  t.focus();
+  e.target.innerHTML='<i class="fa fa-plus added btn" aria-hidden="true"></i>';
 
-
+  const added=document.querySelector(".added");
+  
+  console.log(added);
+  added.addEventListener('click',addnewcontant);
+  
+  
+  //e.target.previousElementSibling.
+  //removeFromLocalStorage(data,);
 }
 
 
  }
 
- function removeFromLocalStorage(e)
+ function addnewcontant(e)
  {
-   if(e.target.children[0].classList.contains("fa-trash")){
+   console.log(e.target.parentElement.innerHTML);
+   console.log("check");
+   d2=e.target.parentElement.previousElementSibling.innerText;
+   e.target.parentElement.previousElementSibling.setAttribute('contenteditable','false');
+   e.target.parentElement.innerHTML='<i class="fas fa-edit edit-btn btn"></i>';
+   removeFromLocalStorage(d1,d2);
+ }
+ 
+ function removeFromLocalStorage(data,check="")
+ {
 
    if(JSON.parse(localStorage.getItem("todos")!==null))
    {
@@ -121,16 +151,22 @@ if(e.target.children[0].classList.contains("fa-check"))
      let array=[];
      array=JSON.parse(localStorage.getItem("todos"));
      //console.log(e.target.parentElement.previousElementSibling.previousElementSibling.innerText);
-       let data=e.target.previousElementSibling.previousElementSibling.innerText;
        //console.log(data);
          if(data!==null){
        //console.log(array);
       let index=array.indexOf(data);
-      array.splice(index,1);
+      if(check=="")
+      {
+        array.splice(index,1);
+      }
+      if(check!="")
+      {
+        array[index]=d2;
+      }
 localStorage.setItem("todos",JSON.stringify(array));
 
    }
- }}
+ }
 
 
  }
