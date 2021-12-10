@@ -13,7 +13,7 @@ var d3;
 
 todo_button.addEventListener('click',buttonClicked);
 todoList.addEventListener('click',manageTodo);
-select.addEventListener('click',selectMe);
+select.addEventListener('change',selectMe);
 retrivingFromLocal();
 
 
@@ -86,7 +86,7 @@ if(todo_input.value!=="")
  function manageTodo(e)
  {
 
-    
+
   
    if(e.target.children[0].classList.contains("fa-trash")){
      data=e.target.previousElementSibling.previousElementSibling.previousElementSibling.innerText;
