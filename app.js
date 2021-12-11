@@ -20,8 +20,6 @@ retrivingFromLocal();
 //Functions
 function retrivingFromLocal()
 {
-
-
   if(JSON.parse(localStorage.getItem("todos")!==null))
   {
     let array=[];
@@ -34,7 +32,7 @@ function retrivingFromLocal()
     newTodo.innerText=values;
     todoDiv.appendChild(newTodo);
     const trashEditButton=document.createElement("button");
-    trashEditButton.innerHTML=`<i class="fas fa-edit edit-btn btn"></i>`;
+    trashEditButton.innerHTML=`<i class="fas fa-edit edit-btn  btn"></i>`;
     
     todoDiv.appendChild(trashEditButton);
     const completedButton =document.createElement("button");
@@ -49,8 +47,6 @@ function retrivingFromLocal()
     todoList.appendChild(todoDiv);
 });
 
-
-
 }
 
 }
@@ -58,7 +54,6 @@ function retrivingFromLocal()
 function buttonClicked(event)
 {
   event.preventDefault();
-//console.log(typeof(todo_input.value));
 if(todo_input.value!=="")
 {
   const todoDiv=document.createElement("div");
@@ -79,24 +74,17 @@ if(todo_input.value!=="")
   todoList.appendChild(todoDiv);
    saveLocalTodos(todo_input.value);
 }
-  //console.log('hello');
   todo_input.value="";
 }
 
  function manageTodo(e)
  {
-
-
-  
    if(e.target.children[0].classList.contains("fa-trash")){
      data=e.target.previousElementSibling.previousElementSibling.previousElementSibling.innerText;
     removeFromLocalStorage(data);
    const item=e.target.parentElement;
    item.classList.add("fall");
-    
-  //console.log(item);
-   setTimeout(function(){
-     //console.log("ch");
+       setTimeout(function(){
       item.remove();;
 
    },700);
@@ -110,22 +98,16 @@ if(e.target.children[0].classList.contains("fa-check"))
 }
 if(e.target.children[0].classList.contains("fa-edit"))
 {
-  //console.log(e.target.previousElementSibling.innerHTML);
   let t=e.target.previousElementSibling;
    d1=t.innerText;
-  //console.log(d1);
   t.setAttribute('contenteditable','true');
   t.focus();
-  e.target.innerHTML='<i class="fa fa-plus added btn" aria-hidden="true"></i>';
-
-  const added=document.querySelector(".added");
-  
+ e.target.children[0].classList.remove('fa-edit');
+ e.target.children[0].classList.add('mind');
+  const added=document.querySelector(".mind");
   console.log(added);
   added.addEventListener('click',addnewcontant);
   
-  
-  //e.target.previousElementSibling.
-  //removeFromLocalStorage(data,);
 }
 
 
@@ -133,11 +115,13 @@ if(e.target.children[0].classList.contains("fa-edit"))
 
  function addnewcontant(e)
  {
-   console.log(e.target.parentElement.innerHTML);
-   console.log("check");
+   console.log('check');
+   console.log(e.target);
    d2=e.target.parentElement.previousElementSibling.innerText;
    e.target.parentElement.previousElementSibling.setAttribute('contenteditable','false');
    e.target.parentElement.innerHTML='<i class="fas fa-edit edit-btn btn"></i>';
+   e.target.classList.add('fa-edit');
+   e.target.classList.remove('mind');
    removeFromLocalStorage(d1,d2);
  }
  
@@ -146,14 +130,10 @@ if(e.target.children[0].classList.contains("fa-edit"))
 
    if(JSON.parse(localStorage.getItem("todos")!==null))
    {
-     //console.log(e.target.previousElementSibling.previousElementSibling.innerText);
-
      let array=[];
      array=JSON.parse(localStorage.getItem("todos"));
-     //console.log(e.target.parentElement.previousElementSibling.previousElementSibling.innerText);
-       //console.log(data);
+     
          if(data!==null){
-       //console.log(array);
       let index=array.indexOf(data);
       if(check=="")
       {
@@ -173,21 +153,16 @@ localStorage.setItem("todos",JSON.stringify(array));
 
  function selectMe(e)
  {
-   //console.log(e.target.value);
-  // const todo=document.querySelector(".todo")
     var todos=todoList.childNodes;
-   //console.log(todos);
    if(todos.length!=0){
    todos.forEach(function(single){
       switch(e.target.value)
       {
         case "all":
         console.log(single);
-        //console.log("all");
         single.style.display="flex";
         break;
         case "completed":
-        //console.log(todo);
         if(single.classList.contains('completed'))
         {
          single.style.display="flex" ;

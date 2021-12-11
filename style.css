@@ -190,3 +190,6 @@ height: 100%;
 border-radius: 0.4rem;
 }
   }
+  .edit-btn.mind::before{
+    content:'\f067 '
+  }
